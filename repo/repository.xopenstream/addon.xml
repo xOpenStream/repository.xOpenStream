@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="repository.xopenstream" name="XOpenStream Repository" provider-name="xOpenStream" version="1.0">
+	<extension point="xbmc.addon.repository" name="XOpenStream Repository">
+	    <dir>
+            <info compressed="false">https://raw.githubusercontent.com/xOpenStream/repository.xOpenStream/main/repo/zips/addons.xml</info>
+            <checksum>https://raw.githubusercontent.com/xOpenStream/repository.xOpenStream/main/repo/zips/addons.xml.md5</checksum>
+            <datadir zip="true">https://raw.githubusercontent.com/xOpenStream/repository.xOpenStream/main/repo/zips/</datadir>
+        </dir>
+		<dir>
+		    <info compressed="false">https://raw.githubusercontent.com/xOpenStream/repository.xOpenStream/main/m1/zips/addons.xml</info>
+		    <checksum>https://raw.githubusercontent.com/xOpenStream/repository.xOpenStream/main/m1/zips/addons.xml.md5</checksum>
+		    <datadir zip="true">https://raw.githubusercontent.com/xOpenStream/repository.xOpenStream/main/m1/zips/</datadir>
+		</dir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<description lang="en">xOpenStream</description>
+		<website>https://xOpenStream.github.io</website>
+		<assets>
+			<icon>icon.png</icon>
+		</assets> 
+	</extension>
+</addon>
