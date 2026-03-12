@@ -1,0 +1,146 @@
+name: Build Kodi Addon
+
+on:
+  workflow_call:
+    inputs:
+      addon_owner:
+        description: Owner of the addon repository
+        type: string
+        required: true
+        default: xOpenStream
+      addon_repo:
+        description: Name of the addon repository
+        type: string
+        required: true
+        default: plugin.video.xstream
+      addon_branch:
+        description: Branch of addon repository
+        type: string
+        required: true
+        default: main
+  workflow_dispatch:
+    inputs:
+      addon_owner:
+        description: Owner of the addon repository
+        required: true
+        default: xOpenStream
+      addon_repo:
+        description: Name of the addon repository
+        required: true
+        default: plugin.video.xstream
+      addon_branch:
+        description: Branch of addon repository
+        required: true
+        default: main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      # 1️⃣ Checkout Repo
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          path: ${{ github.event.repository.name }}
+          ref: main
+
+      # 2️⃣ Checkout Addon
+      - name: Checkout Addon
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.addon_owner }}/${{ inputs.addon_repo }}
+          ref: ${{ inputs.addon_branch }}
+          path: ${{ inputs.addon_repo }}
+
+      # 3️⃣ Package addon into repo
+      - name: Package addon into repo
+        run: |
+            ls -ltr;
+            python3 << 'EOF'
+            import os
+            import zipfile
+            import hashlib
+            import xml.etree.ElementTree as ET
+            from shutil import copy2
+            
+            repo_root = "${{ github.event.repository.name }}"
+            repo_data = os.path.join(repo_root, "zips")
+            addon_branch = "${{ inputs.addon_branch }}"
+            addon_path = "${{ inputs.addon_repo }}"
+            addon_src = os.path.basename(addon_path)
+            
+            def patchNightly(p_addon_path, p_addon_branch):
+                if p_addon_branch.endswith("nightly"):
+                    tree = ET.parse(os.path.join(p_addon_path, "addon.xml"))
+                    root = tree.getroot()
+                    version = root.attrib.get('version')
+                    root.attrib['version'] = f"{version}~nightly"
+                    addon_id = root.attrib.get('id')
+                    root.attrib['id'] = f"{addon_id}-nightly"
+                    tree.write(os.path.join(p_addon_path, "addon.xml"))
+                    os.rename(p_addon_path, f"{p_addon_path}-nightly")
+                    return f"{addon_id}-nightly"
+                return f"{p_addon_path}"
+            
+            def createPackage(p_addon_path, p_repo_data, version):
+                addon_dir = os.path.basename(p_addon_path)
+                zip_name = f"{addon_dir}-{version}.zip"
+                zip_path = os.path.join(p_repo_data, addon_dir, zip_name)
+                
+                os.makedirs(os.path.dirname(zip_path), exist_ok=True)
+                with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                    for root, dirs, files in os.walk(p_addon_path):
+                        # Exclude .git directory
+                        if '.git' in dirs:
+                            dirs.remove('.git')
+                        for file in files:
+                            zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), p_addon_path))
+                
+                copy2(os.path.join(p_addon_path, "addon.xml"), os.path.dirname(zip_path))
+            
+            def extractVersion(p_addon_path):
+                tree = ET.parse(os.path.join(p_addon_path, "addon.xml"))
+                root = tree.getroot()
+                version = root.attrib.get('version')
+                return version
+            
+            def mergeAddonXml(p_repo_data):
+                merged_xml = ET.Element("addons")
+                for root, dirs, files in os.walk(p_repo_data):
+                    if 'addon.xml' in files:
+                        tree = ET.parse(os.path.join(root, 'addon.xml'))
+                        merged_xml.append(tree.getroot())
+            
+                tree = ET.ElementTree(merged_xml)
+                tree.write(os.path.join(p_repo_data, "addons.xml"))
+            
+            def mergedAddonXmlMd5(p_repo_data):
+                with open(os.path.join(p_repo_data, "addons.xml"), 'rb') as f:
+                    md5_hash = hashlib.md5(f.read()).hexdigest()
+            
+                with open(os.path.join(p_repo_data, "addons.xml.md5"), 'w') as f:
+                    f.write(md5_hash)
+            
+            addon_path = patchNightly(addon_path, addon_branch)
+            print("nightly")
+            version = extractVersion(addon_path)
+            print("version")
+            createPackage(addon_path, repo_data, version)
+            print("package")
+            mergeAddonXml(repo_data)
+            print("addonxml")
+            mergedAddonXmlMd5(repo_data)
+            print("addonxmlMd5")
+            EOF
+            ls -ltr
+
+      # 5️⃣ Commit & push
+      - name: Commit & Push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          repository: ${{ github.event.repository.name }}
+          branch: main
+          commit_message: "publish ${{ inputs.addon_repo }} ${{ inputs.addon_branch }}"
