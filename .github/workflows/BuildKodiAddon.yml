@@ -3,11 +3,6 @@ name: Build Kodi Addon
 on:
   workflow_call:
     inputs:
-      addon_owner:
-        description: Owner of the addon repository
-        type: string
-        required: true
-        default: xOpenStream
       addon_repo:
         description: Name of the addon repository
         type: string
@@ -20,10 +15,6 @@ on:
         default: main
   workflow_dispatch:
     inputs:
-      addon_owner:
-        description: Owner of the addon repository
-        required: true
-        default: xOpenStream
       addon_repo:
         description: Name of the addon repository
         required: true
@@ -51,7 +42,7 @@ jobs:
       - name: Checkout Addon
         uses: actions/checkout@v6
         with:
-          repository: ${{ inputs.addon_owner }}/${{ inputs.addon_repo }}
+          repository: ${{ github.repository_owner }}/${{ inputs.addon_repo }}
           ref: ${{ inputs.addon_branch }}
           path: ${{ inputs.addon_repo }}
 
