@@ -91,17 +91,26 @@ jobs:
                 addon_dir = os.path.basename(p_addon_path)
                 zip_name = f"{addon_dir}-{version}.zip"
                 zip_path = os.path.join(p_repo_data, addon_dir, zip_name)
-                
+
                 os.makedirs(os.path.dirname(zip_path), exist_ok=True)
+
+                base_dir = os.path.dirname(p_addon_path)
+
                 with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
                     for root, dirs, files in os.walk(p_addon_path):
+
                         # Exclude .git directory
                         if '.git' in dirs:
                             dirs.remove('.git')
+
                         for file in files:
-                            zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), p_addon_path))
-                
-                copy2(os.path.join(p_addon_path, "addon.xml"), os.path.dirname(zip_path))
+                            if file == "__init__.py":
+                                continue
+                            full_path = os.path.join(root, file)
+                            arcname = os.path.relpath(full_path, base_dir)
+                            zipf.write(full_path, arcname)
+
+                        copy2(os.path.join(p_addon_path, "addon.xml"), os.path.dirname(zip_path))
             
             def extractVersion(p_addon_path):
                 tree = ET.parse(os.path.join(p_addon_path, "addon.xml"))
