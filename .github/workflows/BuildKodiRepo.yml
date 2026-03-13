@@ -10,7 +10,6 @@ jobs:
       contents: write
     uses: ./.github/workflows/BuildKodiAddon.yml
     with:
-      addon_owner: "xOpenStream"
       addon_repo: "plugin.video.xstream"
       addon_branch: "main"
   xShipMain:
@@ -19,7 +18,6 @@ jobs:
       contents: write
     uses: ./.github/workflows/BuildKodiAddon.yml
     with:
-      addon_owner: "xOpenStream"
       addon_repo: "plugin.video.xship"
       addon_branch: "main"
   xStreamNightly:
@@ -28,7 +26,6 @@ jobs:
       contents: write
     uses: ./.github/workflows/BuildKodiAddon.yml
     with:
-      addon_owner: "xOpenStream"
       addon_repo: "plugin.video.xstream"
       addon_branch: "nightly"
   xShipNightly:
@@ -37,6 +34,5 @@ jobs:
       contents: write
     uses: ./.github/workflows/BuildKodiAddon.yml
     with:
-      addon_owner: "xOpenStream"
       addon_repo: "plugin.video.xship"
       addon_branch: "nightly"
