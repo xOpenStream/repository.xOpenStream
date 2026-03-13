@@ -42,14 +42,14 @@ jobs:
     steps:
       # 1️⃣ Checkout Repo
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: ${{ github.event.repository.name }}
           ref: main
 
       # 2️⃣ Checkout Addon
       - name: Checkout Addon
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ inputs.addon_owner }}/${{ inputs.addon_repo }}
           ref: ${{ inputs.addon_branch }}
@@ -141,7 +141,7 @@ jobs:
 
       # 5️⃣ Commit & push
       - name: Commit & Push changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           repository: ${{ github.event.repository.name }}
           branch: main
