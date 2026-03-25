@@ -82,7 +82,7 @@
 			<banner>resources/media/banner.png</banner>
 		</assets>
     </extension>
-</addon><addon id="plugin.video.xstream-nightly" name="xStream-nightly" version="2026-03-22~nightly" provider-name="xOpenStream">
+</addon><addon id="plugin.video.xstream-nightly" name="xStream-nightly" version="2026-03-24~nightly" provider-name="OG by xStreamTeam/Michaz Mod by Akisame">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />
