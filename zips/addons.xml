@@ -1,4 +1,30 @@
-<addons><addon id="plugin.video.xstream" name="xStream" version="2026.02.11" provider-name="xOpenStream">
+<addons><addon id="plugin.video.xship-nightly" version="2026-03-22~nightly" name="xShip-nightly" provider-name="xOpenStream">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.requests" />
+        <import addon="script.module.download-m3u8" optional="true" />
+        <import addon="script.module.six" />
+        <import addon="script.module.kodi-six" />
+        <import addon="script.module.pyaes" />
+        <import addon="script.module.infotagger" />
+        <import addon="script.module.resolveurl" version="5.1.100" />
+        
+        <import addon="script.module.pydevd" optional="true" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py" start="startup" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="de_DE">xShip: Der Fake</summary>
+        <summary lang="en_GB">xShip: The Fake</summary>
+        <assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+			<banner>resources/media/banner.png</banner>
+		</assets>
+    </extension>
+</addon><addon id="plugin.video.xstream" name="xStream" version="2026.02.11" provider-name="xOpenStream">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />
@@ -56,7 +82,7 @@
 			<banner>resources/media/banner.png</banner>
 		</assets>
     </extension>
-</addon><addon id="plugin.video.xstream-nightly" name="xStream-nightly" version="2026-03-24~nightly" provider-name="OG by xStreamTeam/Michaz Mod by Akisame">
+</addon><addon id="plugin.video.xstream-nightly" name="xStream-nightly" version="2026.03.25~nightly" provider-name="OG by xStreamTeam/Michaz Mod by Akisame">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />
@@ -84,30 +110,4 @@
 			<clearlogo>resources/clearlogo.png</clearlogo>
 		</assets>
 	</extension>
-</addon><addon id="plugin.video.xship-nightly" version="2026-03-22~nightly" name="xShip-nightly" provider-name="xOpenStream">
-    <requires>
-        <import addon="xbmc.python" version="3.0.0" />
-        <import addon="script.module.requests" />
-        <import addon="script.module.download-m3u8" optional="true" />
-        <import addon="script.module.six" />
-        <import addon="script.module.kodi-six" />
-        <import addon="script.module.pyaes" />
-        <import addon="script.module.infotagger" />
-        <import addon="script.module.resolveurl" version="5.1.100" />
-        
-        <import addon="script.module.pydevd" optional="true" />
-    </requires>
-    <extension point="xbmc.python.pluginsource" library="default.py">
-        <provides>video</provides>
-    </extension>
-    <extension point="xbmc.service" library="service.py" start="startup" />
-    <extension point="xbmc.addon.metadata">
-        <summary lang="de_DE">xShip: Der Fake</summary>
-        <summary lang="en_GB">xShip: The Fake</summary>
-        <assets>
-			<icon>resources/icon.png</icon>
-			<fanart>resources/fanart.jpg</fanart>
-			<banner>resources/media/banner.png</banner>
-		</assets>
-    </extension>
 </addon></addons>
